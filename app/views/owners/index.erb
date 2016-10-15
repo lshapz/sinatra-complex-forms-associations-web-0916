@@ -1,6 +1,6 @@
 <h1>List of Owners</h1>
 <ul>
-<% @owners.each do |x| %>
- <li><a href="/owners/<%= x.id %>"><%= x.name %></a></li>
+<% @owners.each do |owner| %>
+ <li><a href="/owners/<%= owner.id %>"><%= owner.name %></a></li>
 <% end %>
 </ul>
