@@ -10,8 +10,14 @@ class OwnersController < ApplicationController
   end
 
   post '/owners' do 
-    
+    @owner = Owner.create(params[:owner])
+    if !params["pet"]["name"].empty?
+      @owner.pets << Pet.create(name: params["pet"]["name"])
+    end
+    @owner.save
+    redirect to "owners/#{@owner.id}"
   end
+
 
   get '/owners/:id/edit' do 
     @owner = Owner.find(params[:id])
@@ -19,11 +25,29 @@ class OwnersController < ApplicationController
   end
 
   get '/owners/:id' do 
-    @owner = Owner.find(params[:id])
-    erb :'/owners/show'
+#    binding.pry
+
+    if Owner.all.find_by_id(params[:id]) == nil
+      erb :'/owners/new'
+    else
+      @owner = Owner.find(params[:id])
+      erb :'/owners/show'
+    end 
   end
 
   post '/owners/:id' do 
-   
+    @owner = Owner.find(params[:id])
+    @owner.update(params["owner"])
+    if !params["pet"]["name"].empty?
+      @owner.pets << Pet.create(name: params["pet"]["name"])
+    end
+    redirect to "owners/#{@owner.id}"
   end
+
+
+  post '/owners/:id/delete' do
+    Owner.destroy(params[:id])
+    redirect to "owners"
+  end 
+
 end
